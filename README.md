@@ -63,33 +63,6 @@ chmod +x install_dev_tools.sh
    - Виберіть ваш дистрибутив
    - Apply & Restart
 
-3. **Перезапустіть WSL:**
-   ```powershell
-   # В PowerShell
-   wsl --shutdown
-   ```
-
-## ✅ Перевірка встановлення
-
-Після завершення роботи скрипта:
-
-```bash
-# Перевірка Docker
-docker --version
-docker run hello-world
-
-# Перевірка Docker Compose
-docker compose --version
-# або
-docker-compose --version
-
-# Перевірка Python
-python3 --version
-
-# Перевірка Django
-python3 -c "import django; print('Django:', django.get_version())"
-```
-
 ## 🚀 Швидкий старт
 
 ### Django проект:
@@ -123,28 +96,6 @@ docker run hello-world
 docker run -it python:3.9 python
 ```
 
-## ⚠️ Вирішення проблем
-
-### Docker без sudo:
-```bash
-# Додати користувача до групи docker
-sudo usermod -aG docker $USER
-
-# Перезавантажити групи
-newgrp docker
-```
-
-### WSL Docker Compose помилки:
-```bash
-# Створити аліас
-echo 'alias docker-compose="docker compose"' >> ~/.bashrc
-source ~/.bashrc
-```
-
-### Помилки автентифікації Git:
-- Використовуйте Personal Access Token замість пароля
-- Налаштуйте SSH ключі
-
 ## 📊 Структура репозиторію
 
 ```
@@ -153,12 +104,6 @@ goit-devops/
 ├── README.md              # Документація
 └── .git/                  # Git репозиторій
 ```
-
-## 🤝 Внесок у проект
-
-1. Створіть **Issue** для обговорення змін
-2. Зробіть **Fork** репозиторію
-3. Створіть **Pull Request** з описом змін
 
 ## 📝 Приклади використання
 
@@ -189,10 +134,3 @@ echo 'COPY . /app' >> Dockerfile
 echo 'WORKDIR /app' >> Dockerfile
 echo 'CMD ["python", "app.py"]' >> Dockerfile
 ```
-
----
-
-**🎯 Мета:** Швидке і надійне встановлення інструментів розробки  
-**👨‍💻 Автор:** Artur Mykhailiuk  
-**📅 Оновлено:** Серпень 2025  
-**📄 Ліцензія:** MIT
