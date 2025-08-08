@@ -1,198 +1,175 @@
-# GoIT DevOps - Автоматичне встановлення інструментів розробки
+# GoIT DevOps - Django проєкт з Docker
 
-Репозиторій містить Bash-скрипт для автоматичного встановлення необхідних інструментів розробки на Linux системах.
-
-## 🚀 Скрипт install_dev_tools.sh
-
-### 📦 Що встановлюється:
-
-- **Docker** - платформа контейнеризації
-- **Docker Compose** - управління multi-container додатками  
-- **Python 3.9+** - мова програмування
-- **Django** - веб-фреймворк для Python
-
-### 🎯 Підтримувані системи:
-
-- ✅ Ubuntu/Debian
-- ✅ CentOS/RHEL/Fedora
-- ✅ Arch Linux/Manjaro
-- ✅ WSL 2 (Windows Subsystem for Linux)
-
-## 📋 Інструкція з використання
-
-### 1️⃣ Клонування репозиторію
-```bash
-git clone https://github.com/ArturMykhailiuk/goit-devops.git
-cd goit-devops
-```
-
-### 2️⃣ Надання прав на виконання
-```bash
-chmod +x install_dev_tools.sh
-```
-
-### 3️⃣ Запуск скрипта
-```bash
-./install_dev_tools.sh
-```
-
-## 🔧 Особливості скрипта
-
-### ✨ Розумне встановлення:
-- 🔍 Перевіряє наявність інструментів перед встановленням
-- 🚫 Уникає дублювання
-- 🌐 Автоматично визначає дистрибутив Linux
-- 📡 Перевіряє інтернет з'єднання
-- 🎨 Кольоровий вивід повідомлень
-
-### 🖥️ Спеціальна підтримка WSL 2:
-- Автоматичне визначення WSL середовища
-- Інтеграція з Docker Desktop
-- Створення аліасів для сумісності
-- Спеціальні інструкції для налаштування
-
-## 🐳 Налаштування Docker в WSL 2
-
-Якщо ви використовуєте WSL 2:
-
-1. **Встановіть Docker Desktop для Windows**
-2. **Налаштуйте WSL інтеграцію:**
-   - Відкрийте Docker Desktop
-   - Settings → Resources → WSL Integration
-   - Увімкніть "Enable integration with my default WSL distro"
-   - Виберіть ваш дистрибутив
-   - Apply & Restart
-
-3. **Перезапустіть WSL:**
-   ```powershell
-   # В PowerShell
-   wsl --shutdown
-   ```
-
-## ✅ Перевірка встановлення
-
-Після завершення роботи скрипта:
-
-```bash
-# Перевірка Docker
-docker --version
-docker run hello-world
-
-# Перевірка Docker Compose
-docker compose --version
-# або
-docker-compose --version
-
-# Перевірка Python
-python3 --version
-
-# Перевірка Django
-python3 -c "import django; print('Django:', django.get_version())"
-```
+Повний Django проєкт з PostgreSQL та Nginx, запакований в Docker контейнери.
 
 ## 🚀 Швидкий старт
 
-### Django проект:
+### 1️⃣ Встановлення інструментів
+
 ```bash
-# Створення проекту
-django-admin startproject myproject
-cd myproject
+# Зробити скрипт виконуваним
+chmod +x install_dev_tools.sh
+chmod +x init_project.sh
 
-# Запуск сервера
-python3 manage.py runserver
-```
-
-### Python віртуальне середовище:
-```bash
-# Створення venv
-python3 -m venv myenv
-
-# Активація
-source myenv/bin/activate
-
-# Деактивація
-deactivate
-```
-
-### Docker контейнер:
-```bash
-# Тестовий контейнер
-docker run hello-world
-
-# Python контейнер
-docker run -it python:3.9 python
-```
-
-## ⚠️ Вирішення проблем
-
-### Docker без sudo:
-```bash
-# Додати користувача до групи docker
-sudo usermod -aG docker $USER
-
-# Перезавантажити групи
-newgrp docker
-```
-
-### WSL Docker Compose помилки:
-```bash
-# Створити аліас
-echo 'alias docker-compose="docker compose"' >> ~/.bashrc
-source ~/.bashrc
-```
-
-### Помилки автентифікації Git:
-- Використовуйте Personal Access Token замість пароля
-- Налаштуйте SSH ключі
-
-## 📊 Структура репозиторію
-
-```
-goit-devops/
-├── install_dev_tools.sh    # Основний скрипт встановлення
-├── README.md              # Документація
-└── .git/                  # Git репозиторій
-```
-
-## 🤝 Внесок у проект
-
-1. Створіть **Issue** для обговорення змін
-2. Зробіть **Fork** репозиторію
-3. Створіть **Pull Request** з описом змін
-
-## 📝 Приклади використання
-
-### Встановлення всіх інструментів:
-```bash
+# Встановити Docker, Docker Compose, Python, Django
 ./install_dev_tools.sh
 ```
 
-### Після встановлення - створення Django проекту:
+### 2️⃣ Ініціалізація проєкту
+
 ```bash
-django-admin startproject blog
-cd blog
-python3 manage.py migrate
-python3 manage.py runserver
+# Автоматична ініціалізація Django проєкту
+./init_project.sh
 ```
 
-### Робота з Docker:
-```bash
-# Завантажити образ Python
-docker pull python:3.9
+### 3️⃣ Доступ до додатку
 
-# Запустити інтерактивний Python
-docker run -it python:3.9 python
+- **Головна сторінка:** http://localhost:8000 (прямо Django)
+- **Головна сторінка:** http://localhost:8081 (через Nginx)
+- **Адмін панель:** http://localhost:8000/admin або http://localhost:8081/admin
+- **Логін:** admin / **Пароль:** 123Django123
 
-# Створити простий Dockerfile
-echo 'FROM python:3.9' > Dockerfile
-echo 'COPY . /app' >> Dockerfile
-echo 'WORKDIR /app' >> Dockerfile
-echo 'CMD ["python", "app.py"]' >> Dockerfile
+## 🏗️ Архітектура проєкту
+
+```
+myproject/
+├── web/          # Django додаток (Python 3.9)
+├── db/           # PostgreSQL 15
+├── nginx/        # Nginx проксі сервер
+└── volumes/      # Постійне збереження даних
 ```
 
----
+## 📦 Структура файлів
 
-**🎯 Мета:** Швидке і надійне встановлення інструментів розробки  
+```
+goit-devops/
+├── myproject/              # Django проєкт
+│   ├── __init__.py
+│   ├── settings.py         # Налаштування Django
+│   ├── urls.py            # URL маршрути
+│   ├── wsgi.py            # WSGI конфігурація
+│   └── asgi.py            # ASGI конфігурація
+├── nginx/
+│   └── nginx.conf         # Конфігурація Nginx
+├── static/                # Статичні файли
+├── media/                 # Медіа файли
+├── templates/             # HTML шаблони
+├── Dockerfile             # Образ Django
+├── docker-compose.yml     # Оркестрація контейнерів
+├── requirements.txt       # Python залежності
+├── manage.py             # Django CLI
+├── .env                  # Змінні середовища
+├── install_dev_tools.sh  # Встановлення інструментів
+├── init_project.sh       # Ініціалізація проєкту
+└── README.md             # Документація
+```
+
+## 🛠️ Ручне управління
+
+### Запуск проєкту:
+
+```bash
+# Збірка образів
+docker-compose build
+
+# Запуск у фоновому режимі
+docker-compose up -d
+
+# Перегляд статусу
+docker-compose ps
+```
+
+### Робота з базою даних:
+
+```bash
+# Виконання міграцій
+docker-compose run --rm web python manage.py migrate
+
+# Створення суперкористувача
+docker-compose run --rm web python manage.py createsuperuser
+
+# Збір статичних файлів
+docker-compose run --rm web python manage.py collectstatic
+```
+
+### Налагодження:
+
+```bash
+# Перегляд логів всіх сервісів
+docker-compose logs -f
+
+# Логи конкретного сервісу
+docker-compose logs -f web
+docker-compose logs -f db
+docker-compose logs -f nginx
+
+# Підключення до контейнера
+docker-compose exec web bash
+docker-compose exec db psql -U postgres -d myproject_db
+```
+
+### Зупинка та очищення:
+
+```bash
+# Зупинка сервісів
+docker-compose down
+
+# Зупинка з видаленням volumes
+docker-compose down -v
+
+# Видалення образів
+docker-compose down --rmi all
+```
+
+## 🔧 Конфігурація
+
+### Docker Compose сервіси:
+
+**📱 Web (Django):**
+
+- Порт: 8000
+- Образ: Python 3.9
+- WSGI: Gunicorn
+
+**🗄️ Database (PostgreSQL):**
+
+- Порт: 5432
+- Версія: PostgreSQL 15
+- База: myproject_db
+
+**🌐 Nginx:**
+
+- Порт: 8081 (замість 80 для уникнення конфліктів)
+- Проксування на Django
+- Статичні файли
+
+## 🔍 Перевірка роботи
+
+### 1. Статус контейнерів:
+
+```bash
+docker-compose ps
+```
+
+### 2. Доступність сайту:
+
+```bash
+curl http://localhost:8000
+curl http://localhost:8081
+```
+
+### 3. Підключення до бази:
+
+```bash
+docker-compose exec db psql -U postgres -d myproject_db -c "\dt"
+```
+
+### 4. Журнали помилок:
+
+```bash
+docker-compose logs --tail=50 web
+```
+
+**🎯 Мета:** Повнофункціональний Django проєкт в Docker  
 **👨‍💻 Автор:** Artur Mykhailiuk  
-**📅 Оновлено:** Серпень 2025  
-**📄 Ліцензія:** MIT
+**📅 Створено:** Серпень 2025
