@@ -14,8 +14,6 @@ lesson-5/
 ├── main.tf                  # Головний файл для підключення модулів
 ├── backend.tf               # Налаштування бекенду для стейтів (S3 + DynamoDB)
 ├── outputs.tf               # Загальне виведення ресурсів
-├── deploy.ps1               # Автоматичний скрипт розгортання (Windows)
-├── deploy.sh                # Автоматичний скрипт розгортання (Linux/Mac)
 │
 ├── bootstrap/               # Bootstrap конфігурація (S3 + DynamoDB)
 │   ├── main.tf              # Створення тільки S3 та DynamoDB
