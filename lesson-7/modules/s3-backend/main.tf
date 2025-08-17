@@ -1,3 +1,17 @@
+# S3 Backend Bootstrap Configuration
+# Цей модуль створює S3 bucket та DynamoDB таблицю для Terraform backend
+
+terraform {
+  required_version = ">= 1.0"
+  
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 # S3 bucket for Terraform state storage
 resource "aws_s3_bucket" "terraform_state" {
   bucket = var.bucket_name
@@ -58,5 +72,28 @@ resource "aws_s3_bucket_lifecycle_configuration" "terraform_state_lifecycle" {
     abort_incomplete_multipart_upload {
       days_after_initiation = 7
     }
+  }
+}
+
+# DynamoDB table for Terraform state locking
+resource "aws_dynamodb_table" "terraform_locks" {
+  name         = var.table_name
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+
+  # Enable point-in-time recovery
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  tags = {
+    Name        = var.table_name
+    Purpose     = "Terraform State Locking"
+    Environment = "development"
   }
 }
