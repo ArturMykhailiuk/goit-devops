@@ -5,9 +5,9 @@
 replicaCount: 2
 
 image:
-  repository: 145023106654.dkr.ecr.us-east-1.amazonaws.com/lesson-5-ecr
+  repository: 145023106654.dkr.ecr.us-east-1.amazonaws.com/lesson-7-ecr
   pullPolicy: IfNotPresent
-  tag: "django-app-v2"
+  tag: "v3"
 
 nameOverride: ""
 fullnameOverride: ""

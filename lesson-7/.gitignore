@@ -23,6 +23,12 @@ Thumbs.db
 *.swo
 *~
 
+# Docker
+.lesson-4/
+
+#Helm
+.helm-temp/
+
 # Logs
 *.log
 
