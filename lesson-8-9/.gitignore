@@ -23,15 +23,6 @@ Thumbs.db
 *.swo
 *~
 
-# Docker
-.lesson-4/
-
-# Charts
-.charts/
-
-#Helm
-.helm-temp/
-
 # Logs
 *.log
 
@@ -80,3 +71,7 @@ __pycache__/
 
 # Terraform documentation
 *.md.backup
+.DS_Store
+charts/
+helm-temp/
+lesson-4/
