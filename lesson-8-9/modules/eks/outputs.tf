@@ -32,3 +32,18 @@ output "node_group_status" {
   description = "The status of the EKS node group"
   value       = aws_eks_node_group.this.status
 }
+
+output "cluster_name" {
+  description = "The name of the EKS cluster"
+  value       = aws_eks_cluster.this.name
+}
+
+output "oidc_provider_arn" {
+  description = "OIDC provider ARN for IRSA"
+  value       = aws_iam_openid_connect_provider.oidc.arn
+}
+
+output "oidc_provider_url" {
+  description = "OIDC provider URL for IRSA"
+  value       = aws_iam_openid_connect_provider.oidc.url
+}

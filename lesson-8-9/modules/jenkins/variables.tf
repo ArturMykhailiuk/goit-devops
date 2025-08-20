@@ -21,3 +21,18 @@ variable "admin_password" {
   type        = string
   sensitive   = true
 }
+
+variable "cluster_name" {
+  description = "EKS cluster name for IRSA role"
+  type        = string
+}
+
+variable "oidc_provider_arn" {
+  description = "OIDC provider ARN for IRSA role"
+  type        = string
+}
+
+variable "oidc_provider_url" {
+  description = "OIDC provider URL for IRSA role"
+  type        = string
+}

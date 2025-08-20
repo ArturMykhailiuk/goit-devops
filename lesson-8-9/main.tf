@@ -50,4 +50,7 @@ module "jenkins" {
   helm_chart_version = "5.8.68"
   admin_password    = var.jenkins_admin_password
   kubeconfig_path   = var.kubeconfig_path
+  cluster_name      = module.eks.cluster_name
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  oidc_provider_url = module.eks.oidc_provider_url
 }
