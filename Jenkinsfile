@@ -31,7 +31,7 @@ spec:
   environment {
     ECR_REGISTRY = "145023106654.dkr.ecr.us-east-1.amazonaws.com"
     IMAGE_NAME   = "lesson-8-9-ecr"
-    IMAGE_TAG    = "latest"
+    IMAGE_TAG    = "latest-1"
   }
 
   stages {
