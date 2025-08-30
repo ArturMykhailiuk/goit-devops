@@ -1,4 +1,0 @@
-# Custom values for Argo CD Helm chart
-server:
-  service:
-    type: LoadBalancer

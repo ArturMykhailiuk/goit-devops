@@ -21,10 +21,6 @@ provider "helm" {
 
 terraform {
   required_providers {
-    argocd = {
-      source  = "argoproj-labs/argocd"
-      version = ">= 2.0.0"
-    }
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
@@ -82,17 +78,4 @@ module "jenkins" {
   cluster_name      = module.eks.cluster_name
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = module.eks.oidc_provider_url
-}
-
-# Підключаємо модуль ArgoCD
-module "argo_cd" {
-  source                = "./modules/argo_cd"
-  argo_cd_namespace     = "argocd"
-  argo_cd_chart_version = "5.51.6"
-  kubeconfig_path       = var.kubeconfig_path
-  name                  = "argo-cd"
-  namespace             = "argocd"
-  chart_version         = "8.3.1"
-
-  argocd_server_addr    = var.argocd_server_addr
 }

@@ -56,6 +56,25 @@ spec:
           '''
         }
       }
+      stage('Update Chart Tag in Git') {
+        steps {
+          container('git') {
+            withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
+              sh '''
+                git clone <https://$GIT_USERNAME:$GIT_PAT@github.com/AndriyDmitriv/goit-devops.git>
+                cd goit-devops/django-chart
+
+                sed -i "s/tag: .*/tag: $IMAGE_TAG/" values.yaml
+
+                git config user.email "$COMMIT_EMAIL"
+                git config user.name "$COMMIT_NAME"
+
+                git add values.yaml
+                git commit -m "Update image tag to $IMAGE_TAG"
+                git push origin main
+              '''
+            }
+        }
     }
   }
 }
