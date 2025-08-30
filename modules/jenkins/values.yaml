@@ -5,7 +5,7 @@ persistence:
 
 controller:
   image:
-    tag: "2.504.1-lts"
+    tag: "2.516.2"
   overwritePlugins: true
   installPlugins:
     - configuration-as-code:1985.vdda_32d0c4ea_b_
@@ -50,7 +50,7 @@ controller:
                 scm {
                   git {
                     remote {
-                      url('https://github.com/ArturMykhailiuk/me-helm-repo.git')
+                      url('https://github.com/ArturMykhailiuk/goit-devops.git')
                       credentials('github-token')
                     }
                     branches('*/main')
@@ -65,7 +65,7 @@ controller:
                             scm {
                               git {
                                 remote {
-                                  url("https://github.com/ArturMykhailiuk/me-helm-repo.git")
+                                  url("https://github.com/ArturMykhailiuk/goit-devops.git")
                                   credentials("github-token")
                                 }
                                 branches("*/main")

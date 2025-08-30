@@ -26,7 +26,34 @@ spec:
     }
   }
 
+
+
   environment {
+    ECR_REGISTRY = "145023106654.dkr.ecr.us-east-1.amazonaws.com"
+    IMAGE_NAME   = "app"
+    IMAGE_TAG    = "latest"
+  }
+
+  stages {
+    stage('Build & Push Docker Image') {
+      steps {
+        container('kaniko') {
+          sh '''
+            /kaniko/executor \\
+              --context `pwd` \\
+              --dockerfile `pwd`/Dockerfile \\
+              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
+              --cache=true \\
+              --insecure \\
+              --skip-tls-verify
+          '''
+        }
+      }
+    }
+  }
+}
+
+/*  environment {
     ECR_REGISTRY = "145023106654.dkr.ecr.us-east-1.amazonaws.com"
     IMAGE_NAME   = "lesson-8-9-ecr"
     IMAGE_TAG    = "build-${BUILD_NUMBER}"
@@ -91,3 +118,4 @@ spec:
     }
   }
 }
+*/
