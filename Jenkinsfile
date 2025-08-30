@@ -35,13 +35,20 @@ spec:
   }
 
   stages {
+    stage('Clone Django App Repo') {
+      steps {
+        container('git') {
+          sh 'git clone --branch main https://github.com/ArturMykhailiuk/me-helm-repo.git django-app'
+        }
+      }
+    }
     stage('Build & Push Docker Image') {
       steps {
         container('kaniko') {
           sh '''
             /kaniko/executor \\
               --context `pwd` \\
-              --dockerfile `pwd`/Dockerfile \\
+              --dockerfile `pwd`//django-app/Dockerfile \\
               --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
               --cache=true \\
               --insecure \\

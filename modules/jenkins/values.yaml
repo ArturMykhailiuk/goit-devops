@@ -17,6 +17,7 @@ controller:
     - docker-plugin:latest
     - docker-workflow:latest
     - job-dsl:latest
+    - pipeline-stage-view:latest
   admin:
     username: admin
   # password буде передано з Terraform через set_sensitive
@@ -53,7 +54,7 @@ controller:
                       url('https://github.com/ArturMykhailiuk/goit-devops.git')
                       credentials('github-token')
                     }
-                    branches('*/main')
+                    branches('*/lesson-8-9')
                   }
                 }
                 steps {
@@ -68,7 +69,7 @@ controller:
                                   url("https://github.com/ArturMykhailiuk/goit-devops.git")
                                   credentials("github-token")
                                 }
-                                branches("*/main")
+                                branches("*/lesson-8-9")
                               }
                             }
                           }
