@@ -11,12 +11,28 @@ provider "aws" {
   }
 }
 
+
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = data.aws_eks_cluster.eks.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
     token                  = data.aws_eks_cluster_auth.eks.token
   }
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.eks.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.eks.token
+}
+
+# Data sources for EKS cluster connection
+data "aws_eks_cluster" "eks" {
+  name = module.eks.cluster_name
+}
+
+data "aws_eks_cluster_auth" "eks" {
+  name = module.eks.cluster_name
 }
 
 terraform {
@@ -67,6 +83,7 @@ module "eks" {
   subnet_ids    = module.vpc.private_subnet_ids
 }
 
+
 # Підключаємо модуль Jenkins
 module "jenkins" {
   source            = "./modules/jenkins"
@@ -78,4 +95,13 @@ module "jenkins" {
   cluster_name      = module.eks.cluster_name
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = module.eks.oidc_provider_url
+}
+
+# Підключаємо модуль Argo CD
+module "argo_cd" {
+  source         = "./modules/argo_cd"
+  name           = "argo-cd"
+  namespace      = "argocd"
+  chart_version  = "5.51.6"
+  values         = []
 }
