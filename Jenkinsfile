@@ -47,7 +47,7 @@ spec:
         container('kaniko') {
           sh '''
             /kaniko/executor \\
-              --context `pwd` \\
+              --context `pwd`//django-app \\
               --dockerfile `pwd`//django-app/Dockerfile \\
               --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
               --cache=true \\
@@ -77,8 +77,8 @@ spec:
           sh '''
             ls -l
             /kaniko/executor \
-              --context `pwd` \
-              --dockerfile=Dockerfile \
+              --context `pwd`/django-app \
+              --dockerfile `pwd`/django-app/Dockerfile \
               --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
               --cache=true \
               --insecure \
