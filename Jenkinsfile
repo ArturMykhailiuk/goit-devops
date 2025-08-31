@@ -32,6 +32,7 @@ spec:
     ECR_REGISTRY = "145023106654.dkr.ecr.us-east-1.amazonaws.com"
     IMAGE_NAME   = "lesson-8-9-ecr"
     IMAGE_TAG    = "build-${BUILD_NUMBER}"
+    GITHUB_TOKEN = credentials('github-token')
   }
 
   stages {
@@ -88,7 +89,7 @@ spec:
             git config user.name "Jenkins CI"
             git add charts/django-app/values.yaml
             git commit -m "Update image tag to $IMAGE_TAG [ci skip]" || echo "No changes to commit"
-            git push https://github.com/ArturMykhailiuk/goit-devops.git lesson-8-9
+            git push https://${GITHUB_TOKEN}@github.com/ArturMykhailiuk/goit-devops.git lesson-8-9
           '''
         }
       }
