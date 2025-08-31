@@ -38,7 +38,7 @@ controller:
                   - string:
                       scope: GLOBAL
                       id: github-token
-                      secret: 
+                      secret: {{ .Values.githubPat }}
                       description: GitHub PAT
       jobs: |-
         jobs:
@@ -65,12 +65,11 @@ controller:
                           githubPush()
                         }
                         definition {
-                          cpsScm {
                             scm {
                               git {
                                 remote {
+                                  name('goit-devops')
                                   url("https://github.com/ArturMykhailiuk/goit-devops.git")
-                                  credentials("github-token")
                                 }
                                 branches("*/lesson-8-9")
                               }
