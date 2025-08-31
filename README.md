@@ -45,6 +45,8 @@
    - Запустіть вручну або дочекайтесь автоматичного запуску cron через 5хв.
    - Перевірте статус виконання та логи job
    - Результатом виконання є створення пайплайну з назвою goit-django-docker
+     <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/97dcc1ce-6c40-4c0c-a70b-b0bb0117eff4" />
+
 
 3. **Діагностика:**
    - Якщо job не стартує — перевірте credentials, логи Jenkins, конфігурацію pipeline
