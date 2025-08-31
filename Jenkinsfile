@@ -43,7 +43,7 @@ spec:
           if (commitMsg.contains('[ci skip]')) {
               echo "Found [ci skip] in commit message. Skipping pipeline."
               currentBuild.result = 'SUCCESS'
-              // Завершуємо pipeline goit-django-docker
+              // Завершуємо pipeline goit-django-docker і це дуже добре
               error('Skipping pipeline')
           }
         }
