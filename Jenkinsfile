@@ -31,7 +31,7 @@ spec:
   environment {
     ECR_REGISTRY = "145023106654.dkr.ecr.us-east-1.amazonaws.com"
     IMAGE_NAME   = "lesson-8-9-ecr"
-    IMAGE_TAG    = "latest-1"
+    IMAGE_TAG    = "build-${BUILD_NUMBER}"
   }
 
   stages {
@@ -57,43 +57,13 @@ spec:
         }
       }
     }
-  }
-}
-
-/*  environment {
-    ECR_REGISTRY = "145023106654.dkr.ecr.us-east-1.amazonaws.com"
-    IMAGE_NAME   = "lesson-8-9-ecr"
-    IMAGE_TAG    = "build-${BUILD_NUMBER}"
-    GIT_CRED     = credentials('GITHUB_TOKEN_ID') // Jenkins credential id for GitHub token
-    VALUES_REPO  = "https://github.com/ArturMykhailiuk/goit-devops.git"
-    VALUES_BRANCH = "lesson-8-9"
-    VALUES_PATH  = "modules/jenkins/values.yaml"
-  }
-
-  stages {
-    stage('Build & Push Docker Image') {
-      steps {
-        container('kaniko') {
-          sh '''
-            ls -l
-            /kaniko/executor \
-              --context `pwd`/django-app \
-              --dockerfile `pwd`/django-app/Dockerfile \
-              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \
-              --cache=true \
-              --insecure \
-              --skip-tls-verify
-          '''
-        }
-      }
-    }
 
     stage('Clone values.yaml repo') {
       steps {
         container('git') {
           sh '''
             rm -rf goit-devops
-            git clone --branch $VALUES_BRANCH https://$GIT_CRED@github.com/ArturMykhailiuk/goit-devops.git
+            git clone --branch lesson-8-9 https://github.com/ArturMykhailiuk/goit-devops.git
           '''
         }
       }
@@ -103,7 +73,7 @@ spec:
       steps {
         container('kaniko') {
           sh '''
-            sed -i "s|tag:.*|tag: $IMAGE_TAG|" goit-devops/$VALUES_PATH
+            sed -i "s|tag:.*|tag: $IMAGE_TAG|" goit-devops/charts/django-app/values.yaml
           '''
         }
       }
@@ -116,13 +86,13 @@ spec:
             cd goit-devops
             git config user.email "jenkins@local"
             git config user.name "Jenkins CI"
-            git add $VALUES_PATH
+            git add charts/django-app/values.yaml
             git commit -m "Update image tag to $IMAGE_TAG [ci skip]" || echo "No changes to commit"
-            git push https://$GIT_CRED@github.com/ArturMykhailiuk/goit-devops.git $VALUES_BRANCH
+            git push https://github.com/ArturMykhailiuk/goit-devops.git lesson-8-9
           '''
         }
       }
     }
   }
 }
-*/
+

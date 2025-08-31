@@ -1,0 +1,1 @@
+ECR IMAGE: {{ .Values.image.repository }}:{{ .Values.image.tag }}
