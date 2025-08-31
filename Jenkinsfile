@@ -36,6 +36,19 @@ spec:
   }
 
   stages {
+    stage('Check commit message') {
+      steps {
+        script {
+          def commitMsg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+          if (commitMsg.contains('[ci skip]')) {
+              echo "Found [ci skip] in commit message. Skipping pipeline."
+              currentBuild.result = 'SUCCESS'
+              // Завершуємо pipeline
+              return
+          }
+        }
+      }
+    }
     stage('Clone Django App Repo') {
       steps {
         container('git') {
