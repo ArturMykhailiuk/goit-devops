@@ -13,6 +13,23 @@
 
 ---
 
+## Схема CI/CD
+
+```mermaid
+graph TD
+  X(Push to 'goit-devops') --> |webhook|C1  
+
+  A[Terraform] -->|deploy| B(Jenkins 'seed-job')
+  Y(Push to 'me-helm-repo') --> |webhook|C2  
+  B --> |create by cron| C1('infra-django-docker'<br> Pipeline)
+  B --> |create by cron| C2('app-django-docker'<br> Pipeline)    
+  C1 --> D(Build & Push Docker Image <br>to ECR      )
+  C2 --> D(Build & Push Docker Image <br>to ECR      )
+  D --> E(Update Helm values<br> in GitHub)
+  E --> F(Argo CD Sync)
+  F --> G(Deploy to EKS)
+```
+
 ## Як застосувати Terraform
 
 1. **Передумови:**
@@ -63,19 +80,7 @@
    - Переконайтесь, що статус — Synced, Healthy
    - Перегляньте ресурси, поди, логи, події
 
----
 
-## Схема CI/CD
-
-```mermaid
-graph TD
-  A[GitHub Push] -->|webhook| B(Jenkins Seed Job)
-  B --> C(Jenkins Pipeline Job)
-  C --> D(Build & Push Docker Image to ECR)
-  D --> E(Update Helm values in GitHub)
-  E --> F(Argo CD Sync)
-  F --> G(Deploy to EKS)
-```
 
 ---
 
