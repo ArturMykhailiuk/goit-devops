@@ -60,7 +60,7 @@ controller:
                 steps {
                   dsl {
                     text('''
-                      pipelineJob("goit-django-docker") {
+                      pipelineJob("infra-django-docker") {
                         triggers {
                           githubPush()
                         }
@@ -73,6 +73,30 @@ controller:
                                   credentials("github-token")
                                 }
                                 branches("*/lesson-8-9")
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ''')
+                  }
+                }
+                steps {
+                  dsl {
+                    text('''
+                      pipelineJob("app-django-docker") {
+                        triggers {
+                          githubPush()
+                        }
+                        definition {
+                          cpsScm {
+                            scm {
+                              git {
+                                remote {
+                                  url("https://github.com/ArturMykhailiuk/me-helm-repo.git")
+                                  credentials("github-token")
+                                }
+                                branches("*/main")
                               }
                             }
                           }
