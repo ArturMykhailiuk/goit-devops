@@ -10,7 +10,8 @@
 - **Jenkins** — CI/CD пайплайн для збірки, тестування та деплою
 - **Argo CD** — GitOps CD для Kubernetes
 - **Helm** — менеджер чартів для деплою застосунків
-
+- **Репозиторій 'goit-devops'** - репозиторій для інфраструктирних змін
+- **Репозиторій 'me-helm-repo'** - репозиторій для змін в нашому аплікейшені 'django-app'
 ---
 
 ## Схема CI/CD
@@ -61,9 +62,23 @@ graph TD
    - Знайдіть seed-job
    - Запустіть вручну або дочекайтесь автоматичного запуску cron через 5хв.
    - Перевірте статус виконання та логи job
-   - Результатом виконання є створення пайплайну з назвою goit-django-docker
-     <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/97dcc1ce-6c40-4c0c-a70b-b0bb0117eff4" />
+   - Результатом виконання є створення двох пайплайнів з infra-django-docker та app-django-docker
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/83dc2ea3-a95f-4601-ac22-3531a9b23b42" />
 
+---
+## Як перевірити роботу пайпланів
+1. **Обираємо infra-django-docker**  
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/dce74a75-53f3-45af-9762-9d6d968a8622" />
+  
+- якщо всі кроки в пайплайні зелені, то значить наш Push відбувся в потрібну гілку та всі кроки виконано успішно
+- якщо в пайплайн від блоку Check Commit Message всі наступні кроки червоні, то така поведінка характерна для запобігання зациклення виконання пайплайну. Це виникає із-за того, що одним із кроків в середені нашого пайплайну є Push. І так як webhook також спрацьовує на цей Push, то він буде тригерити виконання пайплайну постійно. Такий варіант потрібно вважати також успішним і, навіть, необхідним
+- якщо в пайплайні інші варіації або помилки - необхідно досліджувати логи та повідомлення     
+
+2. **Обираємо app-django-docker**  
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/22f61cb1-2c34-4e7d-bd51-15ff2f39ced2" />
+
+- якщо всі кроки в пайплайні зелені, то значить наш Push відбувся в потрібну гілку та всі кроки виконано успішно
+- якщо в пайплайні інші варіації або помилки - необхідно досліджувати логи та повідомлення 
 
 ---
 
@@ -71,42 +86,17 @@ graph TD
 
 1. **Доступ до Argo CD UI:**
 
-   - Дізнайтесь адресу Argo CD (LoadBalancer або Ingress)
-   - Відкрийте у браузері: `http://<argocd-address>:8080`
+   - Дізнайтесь адресу Argo CD (LoadBalancer або Ingress) або запустіть port-forward на потрібний порт (Наприклад: 8081)
+   - Відкрийте у браузері: `http://<argocd-address>:8081` або `http://localhost:8081
    - Увійдіть під admin (пароль — початковий або змінений)
 
 2. **Перевірка застосунків:**
    - Знайдіть ваш Application (наприклад, django-app)
    - Переконайтесь, що статус — Synced, Healthy
    - Перегляньте ресурси, поди, логи, події
+   - На поді має бути зазначено образ з тегом останнього білда
+<img width="1924" height="1096" alt="Без імені" src="https://github.com/user-attachments/assets/35a6ef3b-a043-4175-8604-5f5a5c582a75" />
 
-
-
----
-
-## Корисні команди
-
-- Перевірити pod Jenkins:
-  ```
-  kubectl get pods -n jenkins
-  kubectl logs jenkins-0 -n jenkins
-  ```
-- Перевірити pod Argo CD:
-  ```
-  kubectl get pods -n argocd
-  kubectl logs <argocd-server-pod> -n argocd
-  ```
-- Перевірити Helm values:
-  ```
-  helm get values jenkins -n jenkins
-  ```
-- Перевірити credentials у Jenkins UI:
-  - Manage Jenkins → Credentials → (global)
-
----
-
-## Додатково
-
-- Для зміни PAT — змініть змінну TF_VAR_github_pat і повторіть terraform apply
-- Для оновлення застосунку — зробіть git push у відповідний репозиторій
-- Для ручного деплою в Argo CD — натисніть Sync у UI
+## Перевірка django-app
+   - Після Push наших змін у me-helm-repo з нашим аплікейшеном та успішним відпрацюванням пайплайну, зміни мають відображатись на сторінці аплікейшену 
+<img width="1910" height="1029" alt="image" src="https://github.com/user-attachments/assets/2720196c-8060-4d93-8aaf-1a29bf120b88" />
