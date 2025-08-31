@@ -8,3 +8,9 @@ variable "kubeconfig_path" {
   type        = string
   default     = "~/.kube/config"
 }
+
+variable "github_pat" {
+  description = "GitHub Personal Access Token for Jenkins"
+  type        = string
+  sensitive   = true
+}

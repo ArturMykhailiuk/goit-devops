@@ -11,6 +11,20 @@ resource "helm_release" "jenkins" {
     {
       name  = "controller.admin.password"
       value = var.admin_password
+    },
+    {
+      name  = "controller.JCasC.configScripts.credentials"
+      value = <<-EOT
+        credentials:
+          system:
+            domainCredentials:
+              - credentials:
+                  - string:
+                      scope: GLOBAL
+                      id: github-token
+                      secret: ${var.github_pat}
+                      description: GitHub PAT
+      EOT
     }
   ]
 }

@@ -41,3 +41,9 @@ variable "kubeconfig" {
   description = "Шлях до kubeconfig файлу"
   type        = string
 }
+
+variable "github_pat" {
+  description = "GitHub Personal Access Token for Jenkins"
+  type        = string
+  sensitive   = true
+}
