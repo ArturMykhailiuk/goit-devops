@@ -26,12 +26,15 @@ Terraform модуль для створення PostgreSQL бази даних 
 <img width="1905" height="826" alt="image" src="https://github.com/user-attachments/assets/8a3fda12-0c61-48ac-b9c1-4af889f07ce6" />
 
 - ✅ **Security Group** - група безпеки з налаштуваннями доступу
+<img width="1903" height="756" alt="image" src="https://github.com/user-attachments/assets/60ee0c34-36bc-41ff-9587-53035daad298" />
 
 
 - ✅ **Parameter Group** - з базовими параметрами:
   - `max_connections` - максимальна кількість з'єднань
   - `log_statement` - логування SQL запитів
   - `work_mem` - робоча пам'ять для операцій
+<img width="1896" height="831" alt="image" src="https://github.com/user-attachments/assets/efb1b352-afc4-4df0-bb4d-cfb71fd3c824" />
+
 
 ### ⚙️ **Налаштовувані параметри через змінні:**
 
@@ -257,27 +260,6 @@ instance_class = "db.r6g.large"   # 2 vCPU, 16 ГБ RAM
 instance_class = "db.r6g.xlarge"  # 4 vCPU, 32 ГБ RAM
 ```
 
-### Популярні класи інстансів:
-
-**Burstable Performance (T класи) - для розробки:**
-
-- `db.t3.micro` - 1 vCPU, 1 ГБ RAM - найдешевший
-- `db.t3.small` - 1 vCPU, 2 ГБ RAM
-- `db.t3.medium` - 2 vCPU, 4 ГБ RAM
-- `db.t3.large` - 2 vCPU, 8 ГБ RAM
-
-**General Purpose (M класи) - збалансовані:**
-
-- `db.m6i.large` - 2 vCPU, 8 ГБ RAM
-- `db.m6i.xlarge` - 4 vCPU, 16 ГБ RAM
-- `db.m6i.2xlarge` - 8 vCPU, 32 ГБ RAM
-
-**Memory Optimized (R класи) - для Aurora та навантаженої БД:**
-
-- `db.r6g.large` - 2 vCPU, 16 ГБ RAM
-- `db.r6g.xlarge` - 4 vCPU, 32 ГБ RAM
-- `db.r6g.2xlarge` - 8 vCPU, 64 ГБ RAM
-
 ### Налаштування базових параметрів
 
 ```hcl
@@ -313,18 +295,6 @@ backup_retention_period = 7           # Зберігати бекапи 7 дні
 # Для Aurora - налаштування репліків
 aurora_replica_count = 2               # 2 reader репліки
 aurora_replica_count = 3               # 3 reader репліки для high availability
-```
-
-## 🏗️ Архітектура модуля
-
-```
-modules/rds/
-├── variables.tf     # Всі змінні з типами та описами
-├── shared.tf        # DB Subnet Group + Security Group
-├── rds.tf          # Стандартний RDS instance + Parameter Group
-├── aurora.tf       # Aurora Cluster + Writer + Readers + Parameter Group
-└── README.md       # Детальна документація
-```
 
 ### Ресурси, що створюються:
 
@@ -344,66 +314,3 @@ modules/rds/
 - `aws_rds_cluster_instance` (writer) - головний інстанс
 - `aws_rds_cluster_instance` (readers) - репліки для читання
 - `aws_rds_cluster_parameter_group` - параметри для Aurora
-
-## 📊 Приклади параметрів продуктивності
-
-### Базові параметри для всіх конфігурацій:
-
-```hcl
-parameters = {
-  # Основні параметри з'єднань
-  max_connections = "200"
-
-  # Логування
-  log_statement = "all"
-  log_min_duration_statement = "1000"
-
-  # Пам'ять
-  work_mem = "4096"
-}
-```
-
-### Для розробки (мінімальні ресурси):
-
-```hcl
-module "rds_dev" {
-  source = "./modules/rds"
-
-  name           = "myapp-dev"
-  use_aurora     = false
-  instance_class = "db.t3.micro"
-  multi_az       = false
-
-  parameters = {
-    max_connections = "50"
-    log_statement   = "ddl"
-    work_mem        = "2048"
-  }
-}
-```
-
-### Для production (високі вимоги):
-
-```hcl
-module "rds_prod" {
-  source = "./modules/rds"
-
-  name                 = "myapp-prod"
-  use_aurora           = true
-  instance_class       = "db.r6g.large"
-  aurora_replica_count = 2
-  multi_az             = true
-
-  parameters = {
-    max_connections              = "500"
-    log_statement                = "mod"
-    work_mem                     = "8192"
-    shared_preload_libraries     = "pg_stat_statements"
-    log_min_duration_statement   = "5000"
-  }
-}
-```
-
----
-
-**Розроблено для GoIT DevOps курсу** 🎓
