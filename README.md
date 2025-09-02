@@ -11,15 +11,23 @@ Terraform модуль для створення PostgreSQL бази даних 
 - Створюється Aurora Cluster
 - Створюється writer instance
 - Опціонально створюються reader instances
+<img width="1903" height="486" alt="image" src="https://github.com/user-attachments/assets/a6d6f8f0-6955-432c-a359-6d33140a3b75" />
+
 
 **🔹 Стандартний RDS (`use_aurora = false`)**
 
 - Створюється одна `aws_db_instance`
+<img width="1915" height="577" alt="image" src="https://github.com/user-attachments/assets/d58acde2-0903-4248-90f6-616824ad54a1" />
+
 
 ### 🏗️ **В обох випадках створюються:**
 
 - ✅ **DB Subnet Group** - група підмереж для розміщення БД
+<img width="1905" height="826" alt="image" src="https://github.com/user-attachments/assets/8a3fda12-0c61-48ac-b9c1-4af889f07ce6" />
+
 - ✅ **Security Group** - група безпеки з налаштуваннями доступу
+
+
 - ✅ **Parameter Group** - з базовими параметрами:
   - `max_connections` - максимальна кількість з'єднань
   - `log_statement` - логування SQL запитів
