@@ -1,0 +1,44 @@
+{{- range .Values.applications }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  namespace: argocd
+spec:
+  project: {{ .project | default "default" }}
+  source:
+    {{- if .source.repoURL }}
+    repoURL: {{ .source.repoURL }}
+    {{- end }}
+    {{- if .source.chart }}
+    chart: {{ .source.chart }}
+    {{- end }}
+    {{- if .source.path }}
+    path: {{ .source.path }}
+    {{- end }}
+    targetRevision: {{ .source.targetRevision | default "HEAD" }}
+    {{- if .source.helm }}
+    helm:
+      {{- if .source.helm.valueFiles }}
+      valueFiles:
+        {{- toYaml .source.helm.valueFiles | nindent 8 }}
+      {{- end }}
+      {{- if .source.helm.values }}
+      values: |
+        {{- .source.helm.values | nindent 8 }}
+      {{- end }}
+    {{- end }}
+  destination:
+    server: {{ .destination.server | default "https://kubernetes.default.svc" }}
+    namespace: {{ .destination.namespace | default .namespace | default "default" }}
+  {{- if .syncPolicy }}
+  syncPolicy:
+    {{- toYaml .syncPolicy | nindent 4 }}
+    syncOptions:
+      - CreateNamespace=true
+      {{- if .syncPolicy.syncOptions }}
+      {{- toYaml .syncPolicy.syncOptions | nindent 6 }}
+      {{- end }}
+  {{- end }}
+{{- end }}

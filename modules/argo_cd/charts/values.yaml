@@ -1,0 +1,81 @@
+applications:
+  - name: django-app
+    namespace: default
+    project: default
+    source:
+      repoURL: https://github.com/ArturMykhailiuk/goit-devops.git
+      path: charts/django-app
+      targetRevision: lesson-db-module
+      helm:
+        valueFiles:
+          - values.yaml
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: default
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+  - name: prometheus
+    namespace: monitoring
+    project: default
+    source:
+      repoURL: https://prometheus-community.github.io/helm-charts
+      chart: kube-prometheus-stack
+      targetRevision: 61.3.2
+      helm:
+        values: |
+          prometheus:
+            prometheusSpec:
+              serviceMonitorSelectorNilUsesHelmValues: false
+              serviceMonitorSelector: {}
+              ruleSelectorNilUsesHelmValues: false
+              ruleSelector: {}
+              retention: 30d
+              storageSpec:
+                volumeClaimTemplate:
+                  spec:
+                    storageClassName: gp2
+                    accessModes: ["ReadWriteOnce"]
+                    resources:
+                      requests:
+                        storage: 20Gi
+          grafana:
+            adminPassword: admin123
+            service:
+              type: LoadBalancer
+            persistence:
+              enabled: true
+              storageClassName: gp2
+              size: 10Gi
+          alertmanager:
+            alertmanagerSpec:
+              storage:
+                volumeClaimTemplate:
+                  spec:
+                    storageClassName: gp2
+                    accessModes: ["ReadWriteOnce"]
+                    resources:
+                      requests:
+                        storage: 10Gi
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: monitoring
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+        - ServerSideApply=true
+
+repositories:
+  - name: django-app
+    url: https://github.com/ArturMykhailiuk/goit-devops.git
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
+
+repoConfig:
+  insecure: "true"
+  enableLfs: "true"
