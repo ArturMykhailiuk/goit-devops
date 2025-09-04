@@ -60,7 +60,7 @@
   
 - **Argo CD:**
   ```sh
-  kubectl port-forward svc/argocd-server 8081:443 -n argocd
+  kubectl port-forward svc/argo-cd-argocd-server 8081:443 -n argocd
   ```
 <img width="1908" height="842" alt="image" src="https://github.com/user-attachments/assets/23ff58f5-193d-4496-89d5-80e05999a665" />
 
