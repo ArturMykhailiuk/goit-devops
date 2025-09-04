@@ -77,7 +77,7 @@ spec:
         container('git') {
           sh '''
             rm -rf goit-devops
-            git clone --branch lesson-8-9 https://github.com/ArturMykhailiuk/goit-devops.git
+            git clone --branch lesson-db-module https://github.com/ArturMykhailiuk/goit-devops.git
           '''
         }
       }
@@ -102,7 +102,7 @@ spec:
             git config user.name "Jenkins CI"
             git add charts/django-app/values.yaml
             git commit -m "Update image tag to $IMAGE_TAG [ci skip]" || echo "No changes to commit"
-            git push https://${GITHUB_TOKEN}@github.com/ArturMykhailiuk/goit-devops.git lesson-8-9
+            git push https://${GITHUB_TOKEN}@github.com/ArturMykhailiuk/goit-devops.git lesson-db-module
           '''
         }
       }
