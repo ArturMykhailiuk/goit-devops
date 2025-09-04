@@ -356,8 +356,31 @@ try {
                 if ($routeTablesResult) {
                     foreach ($rt in $routeTablesResult.Split()) {
                         if ($rt -and $rt.Trim()) {
-                            aws ec2 delete-route-table --route-table-id $rt --region $region
+                            # First disassociate any explicit associations
+                            $associationsResult = aws ec2 describe-route-tables --route-table-ids $rt --query "RouteTables[0].Associations[?!Main].RouteTableAssociationId" --output text --region $region 2>$null
+                            if ($associationsResult) {
+                                foreach ($assoc in $associationsResult.Split()) {
+                                    if ($assoc -and $assoc.Trim()) {
+                                        aws ec2 disassociate-route-table --association-id $assoc --region $region 2>$null
+                                        Write-Host "Disassociated Route Table: $rt from association $assoc" -ForegroundColor Yellow
+                                    }
+                                }
+                            }
+                            
+                            # Then delete the route table
+                            aws ec2 delete-route-table --route-table-id $rt --region $region 2>$null
                             Write-Host "Deleted Route Table: $rt" -ForegroundColor Yellow
+                        }
+                    }
+                }
+                
+                # Delete Network Interfaces (except those attached to instances)
+                $enisResult = aws ec2 describe-network-interfaces --filters "Name=vpc-id,Values=$vpcId" --query "NetworkInterfaces[?Status=='available'].NetworkInterfaceId" --output text --region $region 2>$null
+                if ($enisResult) {
+                    foreach ($eni in $enisResult.Split()) {
+                        if ($eni -and $eni.Trim()) {
+                            aws ec2 delete-network-interface --network-interface-id $eni --region $region 2>$null
+                            Write-Host "Deleted Network Interface: $eni" -ForegroundColor Yellow
                         }
                     }
                 }
@@ -373,9 +396,26 @@ try {
                     }
                 }
                 
-                # Finally delete VPC
-                aws ec2 delete-vpc --vpc-id $vpcId --region $region
-                Write-Host "Deleted VPC: $vpcId" -ForegroundColor Green
+                # Finally delete VPC (with retry logic)
+                $retryCount = 0
+                $maxRetries = 3
+                do {
+                    $retryCount++
+                    $result = aws ec2 delete-vpc --vpc-id $vpcId --region $region 2>&1
+                    if ($LASTEXITCODE -eq 0) {
+                        Write-Host "Deleted VPC: $vpcId" -ForegroundColor Green
+                        break
+                    } else {
+                        Write-Host "Attempt $retryCount failed to delete VPC: $vpcId" -ForegroundColor Yellow
+                        if ($retryCount -lt $maxRetries) {
+                            Write-Host "Waiting 30 seconds before retry..." -ForegroundColor Yellow
+                            Start-Sleep -Seconds 30
+                        } else {
+                            Write-Host "Failed to delete VPC after $maxRetries attempts: $vpcId" -ForegroundColor Red
+                            Write-Host "Error: $result" -ForegroundColor Red
+                        }
+                    }
+                } while ($retryCount -lt $maxRetries -and $LASTEXITCODE -ne 0)
             }
         }
     }
