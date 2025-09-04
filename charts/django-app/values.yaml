@@ -7,7 +7,7 @@ replicaCount: 2
 image:
   repository: 145023106654.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr
   pullPolicy: IfNotPresent
-  tag: build-v.7
+  tag: build-v.1
 
 nameOverride: ""
 fullnameOverride: ""
